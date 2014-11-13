@@ -36,6 +36,12 @@ Setup auto paging for 5 seconds:
 [carouselView setAutoPagingForInterval:5];
 ```
 
+Setup placeholder for online images:
+
+```
+self.carouselView.defaultImage = [UIImage imageNamed:@"DefaultImage"];
+```
+
 DKCarouselURLItem Or DKCarouselViewItem :
 
 ```  objective-c

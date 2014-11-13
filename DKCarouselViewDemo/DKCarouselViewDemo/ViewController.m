@@ -32,6 +32,7 @@
         
         [items addObject:urlAD];
     }
+    self.carouselView.defaultImage = [UIImage imageNamed:@"DefaultImage"];
     [self.carouselView setItems:items];
     [self.carouselView setAutoPagingForInterval:5];
 }
