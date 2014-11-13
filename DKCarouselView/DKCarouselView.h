@@ -39,10 +39,14 @@ typedef void(^ItemClicked)(DKCarouselItem *ad, NSInteger index);
 
 @interface DKCarouselView : UIView
 
-//@property (nonatomic, assign) BOOL stretchingImage;
 @property (nonatomic, readonly) NSUInteger numberOfItems;
 
 @property (nonatomic, copy) ItemClicked itemClickedBlock;
+
+/**
+ *  Placeholder For DKCarouselURLItem
+ */
+@property (nonatomic, strong) UIImage *defaultImage;
 
 -(void)setItems:(NSArray *)items;
 

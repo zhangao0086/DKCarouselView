@@ -178,7 +178,7 @@ typedef void(^TapBlock)();
         itemView.userInteractionEnabled = YES;
         if ([item isKindOfClass:[DKCarouselURLItem class]]) {
             NSString *imageUrl = [(DKCarouselURLItem *)item imageUrl];
-            [itemView sd_setImageWithURL:[NSURL URLWithString:imageUrl]];
+            [itemView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:self.defaultImage];
         } else if ([item isKindOfClass:[DKCarouselViewItem class]]) {
             UIView *customView = [(DKCarouselViewItem *)item view];
             [itemView addSubview:customView];
@@ -200,13 +200,6 @@ typedef void(^TapBlock)();
     
     [self setNeedsLayout];
 }
-
-//-(void)setStretchingImage:(BOOL)stretchingImage{
-//    _stretchingImage = stretchingImage;
-//    for (UIView *adView in self.adViews) {
-//        if (!_stretchingImage) imageView.contentMode = UIViewContentModeCenter;
-//    }
-//}
 
 -(void)setAutoPagingForInterval:(NSTimeInterval)timeInterval{
     assert(timeInterval >= 0);
