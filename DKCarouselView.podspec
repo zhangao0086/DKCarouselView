@@ -4,7 +4,7 @@ Pod::Spec.new do |s|
   s.summary      = "A automatically & circular infinite scrolling view."
   s.homepage     = "https://github.com/zhangao0086/DKCarouselView"
   s.license      = { :type => "MIT", :file => "LICENSE" }
-  s.author             = { "Bannings" => "zhangao0086@gmail.com" }
+  s.author       = { "Bannings" => "zhangao0086@gmail.com" }
   s.platform     = :ios, "6.0"
   s.source       = { :git => "https://github.com/zhangao0086/DKCarouselView.git", 
                      :tag => s.version.to_s }
