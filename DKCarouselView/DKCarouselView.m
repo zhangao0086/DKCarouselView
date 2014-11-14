@@ -103,11 +103,12 @@ typedef void(^TapBlock)();
     UIPageControl *pageControl = [[UIPageControl alloc] init];
     pageControl.currentPageIndicatorTintColor = self.indicatorTintColor;
     pageControl.userInteractionEnabled = NO;
-    self.pageControl = pageControl;
     
     [self addSubview:scrollView];
-    _scrollView = scrollView;
+    self.scrollView = scrollView;
     [self addSubview:pageControl];
+    self.pageControl = pageControl;
+    
     self.clipsToBounds = YES;
 }
 
