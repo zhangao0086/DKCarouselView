@@ -65,6 +65,8 @@ typedef void(^TapBlock)();
 @property (nonatomic, weak) UIPageControl *pageControl;
 @property (nonatomic, assign) CGRect lstRect;
 
+@property (nonatomic, copy) ItemClicked itemClickedBlock;
+
 @end
 
 @implementation DKCarouselView
@@ -199,6 +201,10 @@ typedef void(^TapBlock)();
     self.lstRect = CGRectZero;
     
     [self setNeedsLayout];
+}
+
+- (void)setItemClickedBlock:(ItemClicked)itemClickedBlock {
+    _itemClickedBlock = itemClickedBlock;
 }
 
 -(void)setAutoPagingForInterval:(NSTimeInterval)timeInterval{

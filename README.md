@@ -5,14 +5,32 @@ DKCarouselView is a automatically & circular infinite scrolling view.The view au
 
 ## How To Get Started
 
+## Installation with CocoaPods
+``` bash
+$ pod search DKCarouselView
+
+-> DKCarouselView (1.0.0)
+   A automatically & circular infinite scrolling view.
+   pod 'DKCarouselView', '~> 1.0.0'
+   - Homepage: https://github.com/zhangao0086/DKCarouselView
+   - Source:   https://github.com/zhangao0086/DKCarouselView.git
+   - Versions: 1.0.0 [master repo]
+```
+
+Edit your Podfile and add DKCarouselView:
+
+``` bash
+pod 'DKCarouselView', '~> x.x.x'
+```
+
 Add `#import "DKCarouselView.h"` to the top of classes that will use it.  
-Create instances (Also supports xib/storyboard) :
+##### Create instances (Also supports xib/storyboard)
 
 ```  objective-c
 DKCarouselView *carouselView = [[DKCarouselView alloc] initWithFrame:CGRectMake(0, 0, 320,220)];
 ```
 
-Setup items:
+##### Setup items
 
 ```  objective-c
 NSArray *images = @[@"https://c1.staticflickr.com/9/8428/7855079606_5fc8852562_z.jpg",
@@ -30,19 +48,27 @@ for (NSString *imageUrl in images) {
 [carouselView setItems:items];
 ```
 
-Setup auto paging for 5 seconds:
+##### Auto paging for 5 seconds
 
 ```  objective-c
 [carouselView setAutoPagingForInterval:5];
 ```
 
-Setup placeholder for online images:
+##### Placeholder for online images
 
 ```
-self.carouselView.defaultImage = [UIImage imageNamed:@"DefaultImage"];
+carouselView.defaultImage = [UIImage imageNamed:@"DefaultImage"];
 ```
 
-DKCarouselURLItem Or DKCarouselViewItem :
+##### Callback
+
+```
+[self.carouselView setItemClickedBlock:^(DKCarouselItem *item, NSInteger index) {
+    NSLog(@"%zd",index);
+}];
+```
+
+##### DKCarouselURLItem Or DKCarouselViewItem
 
 ```  objective-c
 /**

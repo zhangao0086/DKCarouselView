@@ -35,22 +35,22 @@
 
 ////////////////////////////////////////////////////////////////////////
 
-typedef void(^ItemClicked)(DKCarouselItem *ad, NSInteger index);
+typedef void(^ItemClicked)(DKCarouselItem *item, NSInteger index);
 
 @interface DKCarouselView : UIView
 
 @property (nonatomic, readonly) NSUInteger numberOfItems;
 
-@property (nonatomic, copy) ItemClicked itemClickedBlock;
+- (void)setItemClickedBlock:(ItemClicked)itemClickedBlock;
 
 /**
  *  Placeholder For DKCarouselURLItem
  */
 @property (nonatomic, strong) UIImage *defaultImage;
 
--(void)setItems:(NSArray *)items;
+- (void)setItems:(NSArray *)items;
 
--(void)setAutoPagingForInterval:(NSTimeInterval)timeInterval;
+- (void)setAutoPagingForInterval:(NSTimeInterval)timeInterval;
 @property (nonatomic, assign, getter = isPause) BOOL pause;
 
 @property (nonatomic, strong) UIColor *indicatorTintColor;

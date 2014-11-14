@@ -35,6 +35,9 @@
     self.carouselView.defaultImage = [UIImage imageNamed:@"DefaultImage"];
     [self.carouselView setItems:items];
     [self.carouselView setAutoPagingForInterval:5];
+    [self.carouselView setItemClickedBlock:^(DKCarouselItem *item, NSInteger index) {
+        NSLog(@"%zd",index);
+    }];
 }
 
 - (void)didReceiveMemoryWarning {
