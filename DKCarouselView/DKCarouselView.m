@@ -92,12 +92,11 @@ typedef void(^TapBlock)();
     self.carouselItemViews = [[NSMutableArray alloc] initWithCapacity:5];
     
     UIScrollView *scrollView = [[UIScrollView alloc] init];
-    _scrollView = scrollView;
-    _scrollView.showsHorizontalScrollIndicator = _scrollView.showsVerticalScrollIndicator = NO;
-    _scrollView.pagingEnabled = YES;
-    _scrollView.bounces = NO;
-    _scrollView.delegate = self;
-    _scrollView.showsHorizontalScrollIndicator = NO;
+    scrollView.showsHorizontalScrollIndicator = scrollView.showsVerticalScrollIndicator = NO;
+    scrollView.pagingEnabled = YES;
+    scrollView.bounces = NO;
+    scrollView.delegate = self;
+    scrollView.showsHorizontalScrollIndicator = NO;
     
     self.indicatorTintColor = [UIColor lightGrayColor];
     
@@ -106,7 +105,8 @@ typedef void(^TapBlock)();
     pageControl.userInteractionEnabled = NO;
     self.pageControl = pageControl;
     
-    [self addSubview:_scrollView];
+    [self addSubview:scrollView];
+    _scrollView = scrollView;
     [self addSubview:pageControl];
     self.clipsToBounds = YES;
 }
