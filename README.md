@@ -5,7 +5,8 @@ DKCarouselView is a automatically & circular infinite scrolling view.The view au
 
 ## How To Get Started
 
-## Installation with CocoaPods
+### Installation with CocoaPods
+
 ``` bash
 $ pod search DKCarouselView
 
