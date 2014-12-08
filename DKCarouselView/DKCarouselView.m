@@ -54,17 +54,19 @@ typedef void(^TapBlock)();
 
 ////////////////////////////////////////////////////////////////////////
 
+#define GetPreviousIndex()          (self.currentPage - 1 < 0 ? self.carouselItemViews.count - 1 : self.currentPage - 1)
+#define GetNextIndex()              (self.currentPage + 1 >= self.carouselItemViews.count ? 0 : self.currentPage + 1)
+
 @interface DKCarouselView () <UIScrollViewDelegate>
-@property (nonatomic, assign) NSUInteger shouldBeCurrentPage;
-@property (nonatomic, assign) NSUInteger currentPage;
+@property (nonatomic, assign) NSInteger currentPage;
 
 @property (nonatomic, weak) UIScrollView *scrollView;
-@property (nonatomic, strong) NSTimer *autoPagingTimer;
 @property (nonatomic, copy) NSArray *items;
 @property (nonatomic, strong) NSMutableArray *carouselItemViews;
 @property (nonatomic, weak) UIPageControl *pageControl;
 @property (nonatomic, assign) CGRect lstRect;
 
+@property (nonatomic, strong) NSTimer *autoPagingTimer;
 @property (nonatomic, copy) ItemClicked itemClickedBlock;
 
 @end
@@ -139,9 +141,9 @@ typedef void(^TapBlock)();
     _scrollView.contentOffset = CGPointMake(CGRectGetWidth(self.bounds), 0);
     
     [self.carouselItemViews[self.currentPage] setFrame:CGRectMake(CGRectGetWidth(self.scrollView.bounds), 0,
-                                                        CGRectGetWidth(self.scrollView.bounds),
-                                                        CGRectGetHeight(self.scrollView.bounds))];
-
+                                                                  CGRectGetWidth(self.scrollView.bounds),
+                                                                  CGRectGetHeight(self.scrollView.bounds))];
+    
     CGRect newPageControlFrame;
     newPageControlFrame.size = [self.pageControl sizeForNumberOfPages:self.pageControl.numberOfPages];;
     newPageControlFrame.origin = CGPointMake(CGRectGetWidth(self.bounds) - newPageControlFrame.size.width - 10,
@@ -198,7 +200,7 @@ typedef void(^TapBlock)();
         index++;
         [self.carouselItemViews addObject:itemView];
     }
-    [_scrollView addSubview:self.carouselItemViews.firstObject];
+    [self setupViews];
     self.lstRect = CGRectZero;
     
     [self setNeedsLayout];
@@ -245,81 +247,59 @@ typedef void(^TapBlock)();
 }
 
 -(NSUInteger)numberOfItems{
-    return _items.count ? _items.count : 0;
+    return self.items.count ? self.items.count : 0;
+}
+
+- (void)setupViews {
+    [self.carouselItemViews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    self.scrollView.contentOffset = CGPointMake(CGRectGetWidth(self.scrollView.bounds), 0);
+    
+    [self insertPreviousPage];
+    UIView *view = self.carouselItemViews[self.currentPage];
+    view.frame = CGRectMake(CGRectGetWidth(self.scrollView.bounds), 0,
+                            CGRectGetWidth(self.scrollView.bounds), CGRectGetHeight(self.scrollView.bounds));
+    [_scrollView addSubview:view];
+    [self insertNextPage];
 }
 
 -(void)insertPreviousPage{
-    UIView *currentView = self.carouselItemViews[self.shouldBeCurrentPage];
+    NSInteger index = GetPreviousIndex();
+    UIView *currentView = self.carouselItemViews[index];
     currentView.frame = CGRectMake(0, 0, CGRectGetWidth(self.scrollView.bounds), CGRectGetHeight(self.scrollView.bounds));
-    [_scrollView addSubview:currentView];
+    [self.scrollView addSubview:currentView];
 }
 
 -(void)insertNextPage{
-    UIView *currentView = self.carouselItemViews[self.shouldBeCurrentPage];
+    NSInteger index = GetNextIndex();
+    UIView *currentView = self.carouselItemViews[index];
     currentView.frame = CGRectMake(CGRectGetWidth(self.scrollView.bounds) * 2, 0,
                                    CGRectGetWidth(self.scrollView.bounds), CGRectGetHeight(self.scrollView.bounds));
-    [_scrollView addSubview:currentView];
+    [self.scrollView addSubview:currentView];
 }
+
 #pragma mark UIScrollView Delegate Methods
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     if (scrollView.isDragging) {
         self.autoPagingTimer.fireDate = [NSDate dateWithTimeIntervalSinceNow:self.autoPagingTimer.timeInterval];
     }
-    if (scrollView.subviews.count == 1) {
-        if (scrollView.contentOffset.x > CGRectGetWidth(scrollView.bounds)) {
-            if (self.currentPage == self.carouselItemViews.count - 1) {
-                self.shouldBeCurrentPage = 0;
-            } else {
-                self.shouldBeCurrentPage = self.currentPage + 1;
-            }
-            [self insertNextPage];
-        } else if (scrollView.contentOffset.x < CGRectGetWidth(scrollView.bounds)) {
-            if (self.currentPage == 0) {
-                self.shouldBeCurrentPage = self.carouselItemViews.count - 1;
-            } else {
-                self.shouldBeCurrentPage = self.currentPage - 1;
-            }
-            [self insertPreviousPage];
-        }
-    }
 }
 
 // 针对用户手势
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-    if (scrollView.subviews.count != 1) {
-        if (scrollView.contentOffset.x == CGRectGetWidth(scrollView.bounds)) {
-            UIView *abandonView = self.carouselItemViews[self.shouldBeCurrentPage];
-            [abandonView removeFromSuperview];
-        } else {
-            scrollView.contentOffset = CGPointMake(CGRectGetWidth(scrollView.bounds), 0);
-            UIView *lastView = self.carouselItemViews[self.currentPage];
-            UIView *currentView = self.carouselItemViews[self.shouldBeCurrentPage];
-            CGRect newFrame = currentView.frame;
-            newFrame.origin.x = CGRectGetWidth(scrollView.bounds);
-            currentView.frame = newFrame;
-            [lastView removeFromSuperview];
-            self.currentPage = self.shouldBeCurrentPage;
-        }
-        self.pageControl.currentPage = self.currentPage;
+    NSInteger offsetIndex = scrollView.contentOffset.x / CGRectGetWidth(scrollView.bounds);
+    if (offsetIndex == 0) { //  scroll to previous page
+        self.currentPage = GetPreviousIndex();
+        [self setupViews];
+    } else if (offsetIndex == 2) {  // scroll to next page
+        self.currentPage = GetNextIndex();
+        [self setupViews];
     }
+    self.pageControl.currentPage = self.currentPage;
 }
 
 // 针对scrollRectVisible:animated:
 -(void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView{
-    if (scrollView.contentOffset.x == CGRectGetWidth(scrollView.bounds)) {
-        UIView *abandonView = self.carouselItemViews[self.shouldBeCurrentPage];
-        [abandonView removeFromSuperview];
-    } else {
-        scrollView.contentOffset = CGPointMake(CGRectGetWidth(scrollView.bounds), 0);
-        UIView *lastView = self.carouselItemViews[self.currentPage];
-        UIView *currentView = self.carouselItemViews[self.shouldBeCurrentPage];
-        CGRect newFrame = currentView.frame;
-        newFrame.origin.x = CGRectGetWidth(scrollView.bounds);
-        currentView.frame = newFrame;
-        [lastView removeFromSuperview];
-        self.currentPage = self.shouldBeCurrentPage;
-    }
-    self.pageControl.currentPage = self.currentPage;
+    [self scrollViewDidEndDecelerating:scrollView];
 }
 
 @end
