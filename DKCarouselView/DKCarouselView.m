@@ -230,8 +230,7 @@ typedef void(^TapBlock)();
 }
 
 -(void)paging{
-    [_scrollView scrollRectToVisible:CGRectMake(2 * CGRectGetWidth(_scrollView.bounds), 0,
-                                                CGRectGetWidth(_scrollView.bounds), CGRectGetHeight(_scrollView.bounds)) animated:YES];
+    [self.scrollView setContentOffset:CGPointMake(2 * CGRectGetWidth(_scrollView.bounds), 0) animated:YES];
 }
 
 -(void)setPause:(BOOL)pause{
