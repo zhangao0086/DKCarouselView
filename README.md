@@ -1,20 +1,21 @@
 # DKCarouselView
 ![GIF](https://raw.githubusercontent.com/zhangao0086/DKCarouselView/master/preview.gif)
 ## Overview
-DKCarouselView is a automatically & circular infinite scrolling view.The view auto paging/pause can be specified as well.It supports the use of blocks for user interactions.
+DKCarouselView is a automatically & circular infinite scrolling view.The view auto paging/pause can be specified as well.
 
 ## How To Get Started
 
-## Installation with CocoaPods
+### Installation with CocoaPods
+
 ``` bash
 $ pod search DKCarouselView
 
--> DKCarouselView (1.0.0)
+-> DKCarouselView (1.0.1)
    A automatically & circular infinite scrolling view.
-   pod 'DKCarouselView', '~> 1.0.0'
+   pod 'DKCarouselView', '~> 1.0.1'
    - Homepage: https://github.com/zhangao0086/DKCarouselView
    - Source:   https://github.com/zhangao0086/DKCarouselView.git
-   - Versions: 1.0.0 [master repo]
+   - Versions: 1.0.1 [master repo]
 ```
 
 Edit your Podfile and add DKCarouselView:
