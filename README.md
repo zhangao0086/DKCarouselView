@@ -1,5 +1,6 @@
 # DKCarouselView
 ![GIF](https://raw.githubusercontent.com/zhangao0086/DKCarouselView/master/preview.gif)
+![GIF](https://raw.githubusercontent.com/zhangao0086/DKCarouselView/master/preview2.gif)
 ## Overview
 DKCarouselView is a automatically & circular infinite scrolling view.The view auto paging/pause can be specified as well.
 
