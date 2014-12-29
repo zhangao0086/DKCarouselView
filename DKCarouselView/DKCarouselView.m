@@ -132,17 +132,15 @@ typedef void(^TapBlock)();
     if (CGRectEqualToRect(self.lstRect, self.frame)) return;
     self.lstRect = self.frame;
     
-    _scrollView.frame = self.bounds;
+    self.scrollView.frame = self.bounds;
     
     if (self.carouselItemViews.count == 0) {
         return;
     }
-    _scrollView.contentSize = CGSizeMake(CGRectGetWidth(self.bounds) * 3, CGRectGetHeight(self.bounds));
-    _scrollView.contentOffset = CGPointMake(CGRectGetWidth(self.bounds), 0);
-    
-    [self.carouselItemViews[self.currentPage] setFrame:CGRectMake(CGRectGetWidth(self.scrollView.bounds), 0,
-                                                                  CGRectGetWidth(self.scrollView.bounds),
-                                                                  CGRectGetHeight(self.scrollView.bounds))];
+    self.scrollView.contentSize = CGSizeMake(CGRectGetWidth(self.bounds) * 3, CGRectGetHeight(self.bounds));
+    self.scrollView.contentOffset = CGPointMake(CGRectGetWidth(self.bounds), 0);
+
+    [self setupViews];
     
     CGRect newPageControlFrame;
     newPageControlFrame.size = [self.pageControl sizeForNumberOfPages:self.pageControl.numberOfPages];;
