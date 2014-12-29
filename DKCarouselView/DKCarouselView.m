@@ -210,7 +210,7 @@ typedef void(^TapBlock)();
     _itemClickedBlock = itemClickedBlock;
 }
 
--(void)setAutoPagingForInterval:(NSTimeInterval)timeInterval{
+- (void)setAutoPagingForInterval:(NSTimeInterval)timeInterval {
     assert(timeInterval >= 0);
     if (self.autoPagingTimer.timeInterval == timeInterval) {
         [self setPause:NO];
@@ -229,11 +229,13 @@ typedef void(^TapBlock)();
                                                            repeats:YES];
 }
 
--(void)paging{
-    [self.scrollView setContentOffset:CGPointMake(2 * CGRectGetWidth(_scrollView.bounds), 0) animated:YES];
+- (void)paging {
+    if (self.pageControl.numberOfPages > 0) {
+        [self.scrollView setContentOffset:CGPointMake(2 * CGRectGetWidth(_scrollView.bounds), 0) animated:YES];
+    }
 }
 
--(void)setPause:(BOOL)pause{
+- (void)setPause:(BOOL)pause {
     if (self.autoPagingTimer.timeInterval == 0) return;
     if (_pause == pause) return;
     if (!self.autoPagingTimer) return;
@@ -245,7 +247,7 @@ typedef void(^TapBlock)();
     }
 }
 
--(NSUInteger)numberOfItems{
+- (NSUInteger)numberOfItems {
     return self.items.count ? self.items.count : 0;
 }
 
@@ -284,7 +286,7 @@ typedef void(^TapBlock)();
 }
 
 // 针对用户手势
--(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     NSInteger offsetIndex = scrollView.contentOffset.x / CGRectGetWidth(scrollView.bounds);
     if (offsetIndex == 0) { //  scroll to previous page
         self.currentPage = GetPreviousIndex();
@@ -297,7 +299,7 @@ typedef void(^TapBlock)();
 }
 
 // 针对scrollRectVisible:animated:
--(void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView{
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
     [self scrollViewDidEndDecelerating:scrollView];
 }
 
