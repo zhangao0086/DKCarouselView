@@ -362,7 +362,7 @@ typedef void(^PageBlock)();
         self.currentPage = GetPreviousIndex();
 
         if (self.itemPagedBlock != nil) {
-            self.itemPagedBlock(scrollView, self.currentPage);
+            self.itemPagedBlock(self, self.currentPage);
         }
 //        NSLog(@"currentPage at didEnd: %lu",self.currentPage);
         [self setupViews];
@@ -373,7 +373,7 @@ typedef void(^PageBlock)();
         self.currentPage = GetNextIndex();
 
         if (self.itemPagedBlock != nil) {
-            self.itemPagedBlock(scrollView, self.currentPage);
+            self.itemPagedBlock(self, self.currentPage);
         }
 //        NSLog(@"currentPage at didEnd: %lu",self.currentPage);
         [self setupViews];
