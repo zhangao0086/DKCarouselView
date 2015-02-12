@@ -59,7 +59,7 @@ typedef void(^ItemDidPaged)(DKCarouselView *view, NSInteger index);
 
 @property (nonatomic, strong) UIColor *indicatorTintColor;
 
-// set infinite slide or not
+// set infinite slide or not, defaults to NO.
 @property (nonatomic, assign, getter = isFinite) BOOL finite;
 
 @end

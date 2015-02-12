@@ -60,8 +60,7 @@ typedef void(^PageBlock)();
 #define GetNextIndex()              (self.currentPage + 1 >= self.carouselItemViews.count ? 0 : self.currentPage + 1)
 #define kScrollViewFrameWidth       CGRectGetWidth(self.scrollView.bounds)
 #define kScrollViewFrameHeight      CGRectGetHeight(self.scrollView.bounds)
-#define kTouchPreviousBoundary      (self.finite && self.currentPage == 0)
-#define kTouchNextBoundary          (self.finite && self.currentPage == self.carouselItemViews.count - 1)
+#define ProcessFinite()             do {if (self.finite) return;} while(0)
 
 @interface DKCarouselView () <UIScrollViewDelegate>
 @property (nonatomic, assign) NSInteger currentPage;
@@ -97,7 +96,6 @@ typedef void(^PageBlock)();
 - (void)awakeFromNib {
     [super awakeFromNib];
 
-    self.finite = NO;
     self.currentPage = 0;
     self.lastRect = CGRectZero;
     [self setCarouselItemViews:[[NSMutableArray alloc] initWithCapacity:5]];
@@ -121,6 +119,13 @@ typedef void(^PageBlock)();
     self.pageControl = pageControl;
 
     self.clipsToBounds = YES;
+    self.finite = NO;
+}
+
+- (void)setFinite:(BOOL)finite {
+    _finite = finite;
+    
+    self.scrollView.bounces = finite;
 }
 
 // Subclasses can override this method as needed to perform more precise layout of their subviews.
@@ -128,7 +133,7 @@ typedef void(^PageBlock)();
 // You can use your implementation to set the frame rectangles of your subviews directly.
 - (void)layoutSubviews {
     [super layoutSubviews];
-
+    
     if (CGRectEqualToRect(self.lastRect, self.frame)) return;
     self.lastRect = self.frame;
 
@@ -137,14 +142,14 @@ typedef void(^PageBlock)();
     if (self.carouselItemViews.count == 0) {
         return;
     }
-
-    [self setupViews];
-
+    
     CGRect frame;
     frame.size = [self.pageControl sizeForNumberOfPages:self.pageControl.numberOfPages];
     frame.origin = CGPointMake(CGRectGetWidth(self.bounds) / 2 - frame.size.width / 2,
-            CGRectGetHeight(self.bounds) - frame.size.height);
+                               CGRectGetHeight(self.bounds) - frame.size.height);
     self.pageControl.frame = frame;
+
+    [self setupViews];
 }
 
 // The default implementation of this method does nothing.
@@ -252,10 +257,9 @@ typedef void(^PageBlock)();
 
 - (void)pagingNext {
     if (self.pageControl.numberOfPages > 0) {
-        if (kTouchPreviousBoundary) {
-            [self.scrollView setContentOffset:CGPointMake(kScrollViewFrameWidth, 0) animated:YES];
-        } else if (kTouchNextBoundary) {
-            return;
+        if (self.finite) {
+            [self.scrollView setContentOffset:CGPointMake(kScrollViewFrameWidth * GetNextIndex(), 0)
+                                     animated:YES];
         } else {
             [self.scrollView setContentOffset:CGPointMake(2 * kScrollViewFrameWidth, 0) animated:YES];
         }
@@ -279,65 +283,55 @@ typedef void(^PageBlock)();
 }
 
 - (void)setupViews {
-    [self.carouselItemViews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-
-//    NSLog(@"currentPage at setupViews: %lu",self.currentPage);
-    CGFloat originX,
-            originY = 0;
-
-    if (kTouchPreviousBoundary) {
-        originX = 0;
-        self.scrollView.contentSize = CGSizeMake(kScrollViewFrameWidth * 2, kScrollViewFrameHeight);
-    } else if (kTouchNextBoundary) {
-        originX = CGRectGetWidth(self.scrollView.bounds);
-        self.scrollView.contentSize = CGSizeMake(kScrollViewFrameWidth * 2, kScrollViewFrameHeight);
+    if (self.finite) {
+        self.scrollView.contentSize = CGSizeMake(kScrollViewFrameWidth * self.items.count,
+                                                 0);
+        for (int i = 0; i < self.carouselItemViews.count; i++) {
+            UIView *view = self.carouselItemViews[i];
+            if (view.superview == nil) {
+                [self.scrollView addSubview:view];
+            }
+            
+            view.frame = CGRectMake(i * kScrollViewFrameWidth,
+                                    0,
+                                    kScrollViewFrameWidth,
+                                    kScrollViewFrameHeight);
+        }
     } else {
+        [self.carouselItemViews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+        
+        CGFloat originX,
+        originY = 0;
+        
         originX = CGRectGetWidth(self.scrollView.bounds);
         self.scrollView.contentSize = CGSizeMake(kScrollViewFrameWidth * 3, kScrollViewFrameHeight);
-    }
-
-    if (!kTouchPreviousBoundary) {
+        
         [self insertPreviousPage];
-    }
-
-    self.scrollView.contentOffset = CGPointMake(originX, originY);
-
-    UIView *currentView = self.carouselItemViews[self.currentPage];
-    currentView.frame = CGRectMake(originX, originY, kScrollViewFrameWidth, kScrollViewFrameHeight);
-    [self.scrollView addSubview:currentView];
-
-    if (!kTouchNextBoundary) {
+        
+        self.scrollView.contentOffset = CGPointMake(originX, originY);
+        
+        UIView *currentView = self.carouselItemViews[self.currentPage];
+        currentView.frame = CGRectMake(originX, originY, kScrollViewFrameWidth, kScrollViewFrameHeight);
+        [self.scrollView addSubview:currentView];
+        
         [self insertNextPage];
+        
+        [self setNeedsLayout];
     }
-
-    [self setNeedsLayout];
 }
 
 - (void)insertPreviousPage {
-//    NSLog(@"insert previous page");
     NSInteger index = GetPreviousIndex();
     UIView *currentView = self.carouselItemViews[index];
-    if (kTouchNextBoundary) {
-        currentView.frame = CGRectMake(0, 0, kScrollViewFrameWidth, kScrollViewFrameHeight);
-    } else {
-        currentView.frame = CGRectMake(0, 0, kScrollViewFrameWidth, kScrollViewFrameHeight);
-    }
+    currentView.frame = CGRectMake(0, 0, kScrollViewFrameWidth, kScrollViewFrameHeight);
     [self.scrollView addSubview:currentView];
 }
 
 - (void)insertNextPage {
-//    NSLog(@"insert next page");
     NSInteger index = GetNextIndex();
     UIView *currentView = self.carouselItemViews[index];
-
-    if (kTouchPreviousBoundary) {
-        currentView.frame = CGRectMake(kScrollViewFrameWidth, 0,
-                kScrollViewFrameWidth, kScrollViewFrameHeight);
-    } else {
-        currentView.frame = CGRectMake(kScrollViewFrameWidth * 2, 0,
-                kScrollViewFrameWidth, kScrollViewFrameHeight);
-    }
-
+    currentView.frame = CGRectMake(kScrollViewFrameWidth * 2, 0,
+                                   kScrollViewFrameWidth, kScrollViewFrameHeight);
     [self.scrollView addSubview:currentView];
 }
 
@@ -349,37 +343,31 @@ typedef void(^PageBlock)();
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    NSInteger currentOffsetIndex = scrollView.contentOffset.x / kScrollViewFrameWidth;
-    NSInteger minmiumOffsetIndex = 0;
-    NSInteger maxmiumOffsetIndex = scrollView.contentSize.width / kScrollViewFrameWidth - 1;
-
-//    NSLog(@"cur:%lu, min:%lu, max:%lu", currentOffsetIndex, minmiumOffsetIndex, maxmiumOffsetIndex);
-
-    if (currentOffsetIndex == minmiumOffsetIndex) { //  scroll to previous page
-
-        if (kTouchPreviousBoundary) return; // lock scroll direction from left to right at begin item.
-
-        self.currentPage = GetPreviousIndex();
-
-        if (self.itemPagedBlock != nil) {
-            self.itemPagedBlock(self, self.currentPage);
+    if (self.finite) {
+        self.currentPage = scrollView.contentOffset.x / kScrollViewFrameWidth;
+    } else {
+        NSInteger currentOffsetIndex = scrollView.contentOffset.x / kScrollViewFrameWidth;
+        NSInteger minmiumOffsetIndex = 0;
+        NSInteger maxmiumOffsetIndex = scrollView.contentSize.width / kScrollViewFrameWidth - 1;
+        
+        if (currentOffsetIndex == minmiumOffsetIndex) { //  scroll to previous page
+            
+            self.currentPage = GetPreviousIndex();
+            
+            if (self.itemPagedBlock != nil) {
+                self.itemPagedBlock(self, self.currentPage);
+            }
+            [self setupViews];
+        } else if (currentOffsetIndex == maxmiumOffsetIndex) {  // scroll to next page
+            
+            self.currentPage = GetNextIndex();
+            
+            if (self.itemPagedBlock != nil) {
+                self.itemPagedBlock(self, self.currentPage);
+            }
+            [self setupViews];
         }
-//        NSLog(@"currentPage at didEnd: %lu",self.currentPage);
-        [self setupViews];
-    } else if (currentOffsetIndex == maxmiumOffsetIndex) {  // scroll to next page
-
-        if (kTouchNextBoundary) return;
-
-        self.currentPage = GetNextIndex();
-
-        if (self.itemPagedBlock != nil) {
-            self.itemPagedBlock(self, self.currentPage);
-        }
-//        NSLog(@"currentPage at didEnd: %lu",self.currentPage);
-        [self setupViews];
     }
-
-//    NSLog(@"last currentPage: %lu", self.currentPage);
 
     self.pageControl.currentPage = self.currentPage;
 }
