@@ -1,8 +1,15 @@
 # DKCarouselView
+## infinite
 ![GIF](https://raw.githubusercontent.com/zhangao0086/DKCarouselView/master/preview.gif)
+
+## finite
+![GIF](https://raw.githubusercontent.com/zhangao0086/DKCarouselView/master/preview3.gif)
+
+## adapting
 ![GIF](https://raw.githubusercontent.com/zhangao0086/DKCarouselView/master/preview2.gif)
+
 ## Overview
-DKCarouselView is a automatically & circular infinite scrolling view.The view auto paging/pause can be specified as well.
+DKCarouselView is a automatically & circular infinite(or not) scrolling view.The view auto paging/pause can be specified as well.
 
 ## How To Get Started
 
@@ -52,27 +59,40 @@ for (NSString *imageUrl in images) {
 
 ##### Auto paging for 5 seconds
 
-```  objective-c
+```objective-c
 [carouselView setAutoPagingForInterval:5];
 ```
 
 ##### Placeholder for online images
 
-```
+```objective-c
 carouselView.defaultImage = [UIImage imageNamed:@"DefaultImage"];
 ```
 
 ##### Callback
 
-```
+```objective-c
 [self.carouselView setItemClickedBlock:^(DKCarouselItem *item, NSInteger index) {
     NSLog(@"%zd",index);
 }];
 ```
 
+```objective-c
+[self.carouselView setItemPagedBlock:^(DKCarouselView *view, NSInteger index) {
+    NSLog(@"%@, %zd", view, index);
+}];
+```
+
+##### Finite or not
+
+```objective-c
+// set infinite slide or not, defaults to NO.
+@property (nonatomic, assign, getter = isFinite) BOOL finite;
+```
+
 ##### DKCarouselURLItem Or DKCarouselViewItem
 
-```  objective-c
+```objective-c
 /**
  *  Online Image
  */
@@ -93,4 +113,7 @@ carouselView.defaultImage = [UIImage imageNamed:@"DefaultImage"];
 ```
 
 ## License
-This code is distributed under the terms and conditions of the <a href="https://github.com/zhangao0086/DKCarouselView/master/LICENSE">MIT license</a>.
+This code is distributed under the terms and conditions of the <a href="https://github.com/zhangao0086/DKCarouselView/blob/master/LICENSE">MIT license</a>
+
+## Special Thanks
+<a target="_blank" href="https://github.com/jiyee">jiyee</a>

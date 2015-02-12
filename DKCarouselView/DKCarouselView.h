@@ -29,30 +29,37 @@
  */
 @interface DKCarouselViewItem : DKCarouselItem
 
+typedef void(^ItemDidClicked)(DKCarouselItem *item, NSInteger index);
+
 @property (nonatomic, strong) UIView *view;
 
 @end
 
-////////////////////////////////////////////////////////////////////////
-
-typedef void(^ItemClicked)(DKCarouselItem *item, NSInteger index);
 
 @interface DKCarouselView : UIView
 
+typedef void(^ItemDidPaged)(DKCarouselView *view, NSInteger index);
+
 @property (nonatomic, readonly) NSUInteger numberOfItems;
 
-- (void)setItemClickedBlock:(ItemClicked)itemClickedBlock;
+// set clicked block
+- (void)setItemClickedBlock:(ItemDidClicked)itemClickedBlock;
 
-/**
- *  Placeholder For DKCarouselURLItem
- */
+// set paged block
+- (void)setItemPagedBlock:(ItemDidPaged)itemPagedBlock;
+
+ // placeholder for DKCarouselURLItem
 @property (nonatomic, strong) UIImage *defaultImage;
 
 - (void)setItems:(NSArray *)items;
 
 - (void)setAutoPagingForInterval:(NSTimeInterval)timeInterval;
+
 @property (nonatomic, assign, getter = isPause) BOOL pause;
 
 @property (nonatomic, strong) UIColor *indicatorTintColor;
+
+// set infinite slide or not, defaults to NO.
+@property (nonatomic, assign, getter = isFinite) BOOL finite;
 
 @end
