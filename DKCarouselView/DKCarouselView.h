@@ -29,8 +29,6 @@
  */
 @interface DKCarouselViewItem : DKCarouselItem
 
-typedef void(^ItemDidClicked)(DKCarouselItem *item, NSInteger index);
-
 @property (nonatomic, strong) UIView *view;
 
 @end
@@ -39,6 +37,7 @@ typedef void(^ItemDidClicked)(DKCarouselItem *item, NSInteger index);
 
 @interface DKCarouselView : UIView
 
+typedef void(^ItemDidClicked)(DKCarouselItem *item, NSInteger index);
 typedef void(^ItemDidPaged)(DKCarouselView *view, NSInteger index);
 
 @property (nonatomic, readonly) NSUInteger numberOfItems;
