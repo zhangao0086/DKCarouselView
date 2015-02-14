@@ -35,6 +35,7 @@ typedef void(^ItemDidClicked)(DKCarouselItem *item, NSInteger index);
 
 @end
 
+//////////////////////////////////////////////////////////////////////////////////////////
 
 @interface DKCarouselView : UIView
 
@@ -51,15 +52,18 @@ typedef void(^ItemDidPaged)(DKCarouselView *view, NSInteger index);
  // placeholder for DKCarouselURLItem
 @property (nonatomic, strong) UIImage *defaultImage;
 
-- (void)setItems:(NSArray *)items;
-
-- (void)setAutoPagingForInterval:(NSTimeInterval)timeInterval;
-
-@property (nonatomic, assign, getter = isPause) BOOL pause;
-
-@property (nonatomic, strong) UIColor *indicatorTintColor;
-
 // set infinite slide or not, defaults to NO.
 @property (nonatomic, assign, getter = isFinite) BOOL finite;
+
+- (void)setItems:(NSArray *)items;
+
+// auto paging.
+- (void)setAutoPagingForInterval:(NSTimeInterval)timeInterval;
+@property (nonatomic, assign, getter = isPause) BOOL pause;
+
+// indicator
+@property (nonatomic, strong) UIColor *indicatorTintColor;
+@property (nonatomic, assign) CGPoint indicatorOffset; // default offset is CGPointZero, the indicator is centered horizontally.
+@property (nonatomic, readonly) CGSize indicatorSize; // returns minimum size for given items.
 
 @end

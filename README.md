@@ -1,9 +1,12 @@
 # DKCarouselView
-## infinite
+## infinite scrolling
 ![GIF](https://raw.githubusercontent.com/zhangao0086/DKCarouselView/master/preview.gif)
 
-## finite
+## finite scrolling
 ![GIF](https://raw.githubusercontent.com/zhangao0086/DKCarouselView/master/preview3.gif)
+
+## custom view
+![GIF](https://raw.githubusercontent.com/zhangao0086/DKCarouselView/master/preview4.gif)
 
 ## adapting
 ![GIF](https://raw.githubusercontent.com/zhangao0086/DKCarouselView/master/preview2.gif)
@@ -88,6 +91,14 @@ carouselView.defaultImage = [UIImage imageNamed:@"DefaultImage"];
 ```objective-c
 // set infinite slide or not, defaults to NO.
 @property (nonatomic, assign, getter = isFinite) BOOL finite;
+```
+
+##### Indicator style
+
+```objective-c
+@property (nonatomic, strong) UIColor *indicatorTintColor;
+@property (nonatomic, assign) CGPoint indicatorOffset; // default offset is CGPointZero, the indicator is centered horizontally.
+@property (nonatomic, readonly) CGSize indicatorSize; // returns minimum size for given items.
 ```
 
 ##### DKCarouselURLItem Or DKCarouselViewItem

@@ -144,9 +144,9 @@ typedef void(^PageBlock)();
     }
     
     CGRect frame;
-    frame.size = [self.pageControl sizeForNumberOfPages:self.pageControl.numberOfPages];
-    frame.origin = CGPointMake(CGRectGetWidth(self.bounds) / 2 - frame.size.width / 2,
-                               CGRectGetHeight(self.bounds) - frame.size.height);
+    frame.size = self.indicatorSize;
+    frame.origin = CGPointMake(CGRectGetWidth(self.bounds) / 2 - frame.size.width / 2 + self.indicatorOffset.x,
+                               CGRectGetHeight(self.bounds) - frame.size.height + self.indicatorOffset.y);
     self.pageControl.frame = frame;
 
     [self setupViews];
@@ -176,6 +176,10 @@ typedef void(^PageBlock)();
     _indicatorTintColor = indicatorTintColor;
     
     self.pageControl.currentPageIndicatorTintColor = indicatorTintColor;
+}
+
+- (CGSize)indicatorSize {
+    return [self.pageControl sizeForNumberOfPages:self.pageControl.numberOfPages];
 }
 
 -(void)setItems:(NSArray *)items {
