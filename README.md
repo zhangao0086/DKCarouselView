@@ -52,7 +52,7 @@ NSArray *images = @[@"https://c1.staticflickr.com/9/8428/7855079606_5fc8852562_z
                     ];
 NSMutableArray *items = [NSMutableArray new];
 for (NSString *imageUrl in images) {
-    DKPaginationURLAd *urlAD = [DKPaginationURLAd new];
+    DKCarouselURLItem *urlAD = [DKCarouselURLItem new];
     urlAD.imageUrl = imageUrl;
     
     [items addObject:urlAD];
