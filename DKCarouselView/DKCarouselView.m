@@ -38,10 +38,14 @@ typedef void(^DKCarouselViewTapBlock)();
 - (void)commonInit {
     self.userInteractionEnabled = YES;
     self.enable = YES;
+    
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTap:)];
+    [self addGestureRecognizer:tapGesture];
 }
 
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+- (IBAction)onTap:(id)sender {
     if (!self.enable) return;
+    
     if (self.tapBlock) {
         self.tapBlock();
     }
@@ -136,12 +140,6 @@ typedef void(^DKCarouselViewTapBlock)();
     self.finite = NO;
 }
 
-- (void)setFinite:(BOOL)finite {
-    _finite = finite;
-    
-    self.scrollView.bounces = finite;
-}
-
 // Subclasses can override this method as needed to perform more precise layout of their subviews.
 // You should override this method only if the autoresizing and constraint-based behaviors of the subviews do not offer the behavior you want.
 // You can use your implementation to set the frame rectangles of your subviews directly.
@@ -183,9 +181,14 @@ typedef void(^DKCarouselViewTapBlock)();
 }
 
 
-#pragma mark - Public API
+#pragma mark - Public methods
 
-// Overload default property method.
+- (void)setFinite:(BOOL)finite {
+    _finite = finite;
+    
+    self.scrollView.bounces = finite;
+}
+
 - (void)setIndicatorTintColor:(UIColor *)indicatorTintColor {
     _indicatorTintColor = indicatorTintColor;
     
@@ -273,17 +276,6 @@ typedef void(^DKCarouselViewTapBlock)();
                                                            repeats:YES];
 }
 
-- (void)pagingNext {
-    if (self.pageControl.numberOfPages > 0) {
-        if (self.finite) {
-            [self.scrollView setContentOffset:CGPointMake(kScrollViewFrameWidth * GetNextIndex(), 0)
-                                     animated:YES];
-        } else {
-            [self.scrollView setContentOffset:CGPointMake(2 * kScrollViewFrameWidth, 0) animated:YES];
-        }
-    }
-}
-
 - (void)setPause:(BOOL)pause {
     if (self.autoPagingTimer.timeInterval == 0) return;
     if (_pause == pause) return;
@@ -298,6 +290,19 @@ typedef void(^DKCarouselViewTapBlock)();
 
 - (NSUInteger)numberOfItems {
     return self.items.count ? self.items.count : 0;
+}
+
+#pragma mark - Private methods
+
+- (void)pagingNext {
+    if (self.pageControl.numberOfPages > 0) {
+        if (self.finite) {
+            [self.scrollView setContentOffset:CGPointMake(kScrollViewFrameWidth * GetNextIndex(), 0)
+                                     animated:YES];
+        } else {
+            [self.scrollView setContentOffset:CGPointMake(2 * kScrollViewFrameWidth, 0) animated:YES];
+        }
+    }
 }
 
 - (void)setupViews {
@@ -353,7 +358,8 @@ typedef void(^DKCarouselViewTapBlock)();
     [self.scrollView addSubview:currentView];
 }
 
-#pragma mark UIScrollView Delegate Methods
+#pragma mark - UIScrollView Delegate Methods
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (scrollView.isDragging) {
         self.autoPagingTimer.fireDate = [NSDate dateWithTimeIntervalSinceNow:self.autoPagingTimer.timeInterval];
