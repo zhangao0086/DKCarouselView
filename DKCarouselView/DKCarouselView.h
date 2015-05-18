@@ -37,16 +37,16 @@
 
 @interface DKCarouselView : UIView
 
-typedef void(^ItemDidClicked)(DKCarouselItem *item, NSInteger index);
-typedef void(^ItemDidPaged)(DKCarouselView *view, NSInteger index);
+typedef void(^DKCarouselViewDidSelectBlock)(DKCarouselItem *item, NSInteger index);
+typedef void(^DKCarouselViewDidChangeBlock)(DKCarouselView *view, NSInteger index);
 
 @property (nonatomic, readonly) NSUInteger numberOfItems;
 
 // set clicked block
-- (void)setItemClickedBlock:(ItemDidClicked)itemClickedBlock;
+- (void)setDidSelectBlock:(DKCarouselViewDidSelectBlock)didSelectBlock;
 
-// set paged block
-- (void)setItemPagedBlock:(ItemDidPaged)itemPagedBlock;
+// set page changed block
+- (void)setDidChangeBlock:(DKCarouselViewDidChangeBlock)didChangeBlock;
 
  // placeholder for DKCarouselURLItem
 @property (nonatomic, strong) UIImage *defaultImage;

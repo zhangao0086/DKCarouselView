@@ -10,13 +10,12 @@
 #import "DKCarouselView.h"
 #import "UIImageView+WebCache.h"
 
-typedef void(^PageBlock)();
-typedef void(^TapBlock)();
+typedef void(^DKCarouselViewTapBlock)();
 
 @interface DKClickableImageView : UIImageView
 
 @property (nonatomic, assign) BOOL enable;
-@property (nonatomic, copy) TapBlock tapBlock;
+@property (nonatomic, copy) DKCarouselViewTapBlock tapBlock;
 
 @end
 
@@ -82,8 +81,8 @@ typedef void(^TapBlock)();
 @property (nonatomic, assign) CGSize lastSize;
 
 @property (nonatomic, strong) NSTimer *autoPagingTimer;
-@property (nonatomic, copy) ItemDidClicked itemClickedBlock;
-@property (nonatomic, copy) ItemDidPaged itemPagedBlock;
+@property (nonatomic, copy) DKCarouselViewDidSelectBlock didSelectBlock;
+@property (nonatomic, copy) DKCarouselViewDidChangeBlock didChangeBlock;
 
 @end
 
@@ -231,8 +230,8 @@ typedef void(^TapBlock)();
         }
         
         [itemView setTapBlock:^ {
-            if (self.itemClickedBlock != nil) {
-                self.itemClickedBlock(item, index);
+            if (self.didSelectBlock != nil) {
+                self.didSelectBlock(item, index);
             }
         }];
 
@@ -246,12 +245,12 @@ typedef void(^TapBlock)();
     [self setNeedsLayout];
 }
 
-- (void)setItemClickedBlock:(ItemDidClicked)itemClickedBlock {
-    _itemClickedBlock = itemClickedBlock;
+- (void)setDidSelectBlock:(DKCarouselViewDidSelectBlock)didSelectBlock {
+    _didSelectBlock = didSelectBlock;
 }
 
-- (void)setItemPagedBlock:(ItemDidPaged)itemPagedBlock {
-    _itemPagedBlock = itemPagedBlock;
+- (void)setDidChangeBlock:(DKCarouselViewDidChangeBlock)didChangeBlock {
+    _didChangeBlock = didChangeBlock;
 }
 
 - (void)setAutoPagingForInterval:(NSTimeInterval)timeInterval {
@@ -366,25 +365,18 @@ typedef void(^TapBlock)();
         self.currentPage = scrollView.contentOffset.x / kScrollViewFrameWidth;
     } else {
         NSInteger currentOffsetIndex = scrollView.contentOffset.x / kScrollViewFrameWidth;
-        NSInteger minmiumOffsetIndex = 0;
+        static NSInteger minmiumOffsetIndex = 0;
         NSInteger maxmiumOffsetIndex = scrollView.contentSize.width / kScrollViewFrameWidth - 1;
         
         if (currentOffsetIndex == minmiumOffsetIndex) { //  scroll to previous page
-            
             self.currentPage = GetPreviousIndex();
-            
-            if (self.itemPagedBlock != nil) {
-                self.itemPagedBlock(self, self.currentPage);
-            }
-            [self setupViews];
         } else if (currentOffsetIndex == maxmiumOffsetIndex) {  // scroll to next page
-            
             self.currentPage = GetNextIndex();
-            
-            if (self.itemPagedBlock != nil) {
-                self.itemPagedBlock(self, self.currentPage);
-            }
-            [self setupViews];
+        }
+        [self setupViews];
+        
+        if (self.didChangeBlock != nil) {
+            self.didChangeBlock(self, self.currentPage);
         }
     }
 
