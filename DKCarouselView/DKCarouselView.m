@@ -10,17 +10,17 @@
 #import "DKCarouselView.h"
 #import "UIImageView+WebCache.h"
 
-typedef void(^TapBlock)();
 typedef void(^PageBlock)();
+typedef void(^TapBlock)();
 
-@interface DKImageViewTap : UIImageView
+@interface DKClickableImageView : UIImageView
 
 @property (nonatomic, assign) BOOL enable;
 @property (nonatomic, copy) TapBlock tapBlock;
 
 @end
 
-@implementation DKImageViewTap
+@implementation DKClickableImageView
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
@@ -216,7 +216,7 @@ typedef void(^PageBlock)();
     
     NSInteger index = 0;
     for (DKCarouselItem *item in _items) {
-        DKImageViewTap *itemView = [DKImageViewTap new];
+        DKClickableImageView *itemView = [DKClickableImageView new];
 
         itemView.userInteractionEnabled = YES;
         if ([item isKindOfClass:[DKCarouselURLItem class]]) {
