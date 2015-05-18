@@ -22,12 +22,23 @@ typedef void(^PageBlock)();
 
 @implementation DKImageViewTap
 
-- (id)initWithFrame:(CGRect)frame {
+- (instancetype)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
-        self.userInteractionEnabled = YES;
-        self.enable = YES;
+        [self commonInit];
     }
     return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if ((self = [super initWithCoder:aDecoder])) {
+        [self commonInit];
+    }
+    return self;
+}
+
+- (void)commonInit {
+    self.userInteractionEnabled = YES;
+    self.enable = YES;
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -35,7 +46,6 @@ typedef void(^PageBlock)();
     if (self.tapBlock) {
         self.tapBlock();
     }
-    [[self nextResponder] touchesEnded:touches withEvent:event];
 }
 
 @end
@@ -69,7 +79,7 @@ typedef void(^PageBlock)();
 @property (nonatomic, copy) NSArray *items;
 @property (nonatomic, strong) NSMutableArray *carouselItemViews;
 @property (nonatomic, weak) UIPageControl *pageControl;
-@property (nonatomic, assign) CGRect lastRect;
+@property (nonatomic, assign) CGSize lastSize;
 
 @property (nonatomic, strong) NSTimer *autoPagingTimer;
 @property (nonatomic, copy) ItemDidClicked itemClickedBlock;
@@ -83,21 +93,26 @@ typedef void(^PageBlock)();
 
 // Subclasses can override this method to perform any custom initialization
 // this method is not called when your view objects are subsequently loaded from the nib file
-- (id)initWithFrame:(CGRect)frame {
+- (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        [self awakeFromNib];
+        [self commonInit];
     }
     
     return self;
 }
 
-// Typically, you implement awakeFromNib for objects that require additional set up that cannot be done at design time.
-- (void)awakeFromNib {
-    [super awakeFromNib];
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        [self commonInit];
+    }
+    return self;
+}
 
+- (void)commonInit {
     self.currentPage = 0;
-    self.lastRect = CGRectZero;
+    self.lastSize = CGSizeZero;
     [self setCarouselItemViews:[[NSMutableArray alloc] initWithCapacity:5]];
     
     UIScrollView *scrollView = [UIScrollView new];
@@ -105,19 +120,19 @@ typedef void(^PageBlock)();
     scrollView.pagingEnabled = YES;
     scrollView.bounces = NO;
     scrollView.delegate = self;
-
+    
     self.indicatorTintColor = [UIColor lightGrayColor];
-
+    
     UIPageControl *pageControl = [UIPageControl new];
     pageControl.currentPageIndicatorTintColor = self.indicatorTintColor;
     pageControl.userInteractionEnabled = NO;
-
+    
     [self addSubview:scrollView];
     self.scrollView = scrollView;
-
+    
     [self addSubview:pageControl];
     self.pageControl = pageControl;
-
+    
     self.clipsToBounds = YES;
     self.finite = NO;
 }
@@ -133,9 +148,9 @@ typedef void(^PageBlock)();
 // You can use your implementation to set the frame rectangles of your subviews directly.
 - (void)layoutSubviews {
     [super layoutSubviews];
-    
-    if (CGRectEqualToRect(self.lastRect, self.frame)) return;
-    self.lastRect = self.frame;
+
+    if (CGSizeEqualToSize(self.lastSize, self.bounds.size)) return;
+    self.lastSize = self.bounds.size;
 
     self.scrollView.frame = self.bounds;
 
@@ -226,7 +241,7 @@ typedef void(^PageBlock)();
     }
 
     [self setupViews];
-    self.lastRect = CGRectZero;
+    self.lastSize = CGSizeZero;
     
     [self setNeedsLayout];
 }
