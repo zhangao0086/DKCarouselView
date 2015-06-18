@@ -145,12 +145,12 @@ typedef void(^DKCarouselViewTapBlock)();
 // You can use your implementation to set the frame rectangles of your subviews directly.
 - (void)layoutSubviews {
     [super layoutSubviews];
-
+    
     if (CGSizeEqualToSize(self.lastSize, self.bounds.size)) return;
     self.lastSize = self.bounds.size;
-
+    
     self.scrollView.frame = self.bounds;
-
+    
     if (self.carouselItemViews.count == 0) {
         return;
     }
@@ -160,7 +160,7 @@ typedef void(^DKCarouselViewTapBlock)();
     frame.origin = CGPointMake(CGRectGetWidth(self.bounds) / 2 - frame.size.width / 2 + self.indicatorOffset.x,
                                CGRectGetHeight(self.bounds) - frame.size.height + self.indicatorOffset.y);
     self.pageControl.frame = frame;
-
+    
     [self setupViews];
 }
 
@@ -168,7 +168,7 @@ typedef void(^DKCarouselViewTapBlock)();
 // Subclasses can override it to perform additional actions whenever the superview changes.
 - (void)willMoveToSuperview:(UIView *)newSuperview {
     [super willMoveToSuperview:newSuperview];
-
+    
     if (newSuperview == nil) {
         [self.autoPagingTimer invalidate];
         self.autoPagingTimer = nil;
@@ -207,10 +207,10 @@ typedef void(^DKCarouselViewTapBlock)();
     self.pageControl.numberOfPages = 0;
     
     if (items.count == 0) return;
-
+    
     _items = nil;
     _items = [items copy];
-
+    
     self.pageControl.numberOfPages = _items.count;
     self.pageControl.currentPage = self.currentPage = 0;
     
@@ -219,7 +219,7 @@ typedef void(^DKCarouselViewTapBlock)();
     NSInteger index = 0;
     for (DKCarouselItem *item in _items) {
         DKClickableImageView *itemView = [DKClickableImageView new];
-
+        
         itemView.userInteractionEnabled = YES;
         if ([item isKindOfClass:[DKCarouselURLItem class]]) {
             NSString *imageUrl = [(DKCarouselURLItem *)item imageUrl];
@@ -237,11 +237,11 @@ typedef void(^DKCarouselViewTapBlock)();
                 self.didSelectBlock(item, index);
             }
         }];
-
+        
         index++;
         [self.carouselItemViews addObject:itemView];
     }
-
+    
     [self setupViews];
     self.lastSize = CGSizeZero;
     
@@ -262,13 +262,13 @@ typedef void(^DKCarouselViewTapBlock)();
         [self setPause:NO];
         return;
     }
-
+    
     if (self.autoPagingTimer) {
         [self.autoPagingTimer invalidate];
         self.autoPagingTimer = nil;
         if (timeInterval == 0) return;
     }
-
+    
     self.autoPagingTimer = [NSTimer scheduledTimerWithTimeInterval:timeInterval
                                                             target:self
                                                           selector:@selector(pagingNext)
@@ -306,7 +306,7 @@ typedef void(^DKCarouselViewTapBlock)();
 }
 
 - (void)setupViews {
-    if (self.finite) {
+    if (self.finite || self.carouselItemViews.count == 1) {
         self.scrollView.contentSize = CGSizeMake(kScrollViewFrameWidth * self.items.count,
                                                  0);
         for (int i = 0; i < self.carouselItemViews.count; i++) {
@@ -363,6 +363,20 @@ typedef void(^DKCarouselViewTapBlock)();
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (scrollView.isDragging) {
         self.autoPagingTimer.fireDate = [NSDate dateWithTimeIntervalSinceNow:self.autoPagingTimer.timeInterval];
+        
+        if (self.carouselItemViews.count == 2) {
+            if (scrollView.contentOffset.x < kScrollViewFrameWidth) {
+                UIView *previousView = self.carouselItemViews[GetPreviousIndex()];
+                if (!CGRectEqualToRect(CGRectMake(0, 0, kScrollViewFrameWidth, kScrollViewFrameHeight), previousView.frame)) {
+                    [self insertPreviousPage];
+                }
+            } else if (scrollView.contentOffset.x > kScrollViewFrameWidth * 2) {
+                UIView *nextView = self.carouselItemViews[GetNextIndex()];
+                if (!CGRectEqualToRect(CGRectMake(kScrollViewFrameWidth * 2, 0, kScrollViewFrameWidth, kScrollViewFrameHeight), nextView.frame)) {
+                    [self insertNextPage];
+                }
+            }
+        }
     }
 }
 
@@ -385,7 +399,7 @@ typedef void(^DKCarouselViewTapBlock)();
             self.didChangeBlock(self, self.currentPage);
         }
     }
-
+    
     self.pageControl.currentPage = self.currentPage;
 }
 
