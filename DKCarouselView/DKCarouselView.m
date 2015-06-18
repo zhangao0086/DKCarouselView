@@ -295,7 +295,7 @@ typedef void(^DKCarouselViewTapBlock)();
 #pragma mark - Private methods
 
 - (void)pagingNext {
-    if (self.pageControl.numberOfPages > 0) {
+    if (self.pageControl.numberOfPages > 1) {
         if (self.finite) {
             [self.scrollView setContentOffset:CGPointMake(kScrollViewFrameWidth * GetNextIndex(), 0)
                                      animated:YES];
