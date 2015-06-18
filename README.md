@@ -21,7 +21,7 @@ DKCarouselView is a automatically & circular infinite(or not) scrolling view.The
 ``` bash
 $ pod search DKCarouselView
 
--> DKCarouselView (1.3.0)
+-> DKCarouselView (1.4.5)
    A automatically & circular infinite scrolling view.
    pod 'DKCarouselView', '~> 1.3.0'
    - Homepage: https://github.com/zhangao0086/DKCarouselView
