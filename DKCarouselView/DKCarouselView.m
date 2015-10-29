@@ -122,6 +122,7 @@ typedef void(^DKCarouselViewTapBlock)();
     scrollView.showsHorizontalScrollIndicator = scrollView.showsVerticalScrollIndicator = NO;
     scrollView.pagingEnabled = YES;
     scrollView.bounces = NO;
+    scrollView.scrollsToTop = NO;
     scrollView.delegate = self;
     
     self.indicatorTintColor = [UIColor lightGrayColor];
