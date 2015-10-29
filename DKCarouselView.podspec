@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "DKCarouselView"
-  s.version      = "1.4.6"
+  s.version      = "1.4.8"
   s.summary      = "DKCarouselView is a automatically & circular infinite(or not) scrolling view.The view auto paging/pause can be specified as well."
   s.homepage     = "https://github.com/zhangao0086/DKCarouselView"
   s.license      = { :type => "MIT", :file => "LICENSE" }
