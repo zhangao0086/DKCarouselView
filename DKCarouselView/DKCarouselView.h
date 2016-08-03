@@ -48,7 +48,7 @@ typedef void(^DKCarouselViewDidChangeBlock)(DKCarouselView *view, NSInteger inde
 // set page changed block
 - (void)setDidChangeBlock:(DKCarouselViewDidChangeBlock)didChangeBlock;
 
- // placeholder for DKCarouselURLItem
+// placeholder for DKCarouselURLItem
 @property (nonatomic, strong) UIImage *defaultImage;
 
 // set infinite slide or not, defaults to NO.
@@ -61,6 +61,7 @@ typedef void(^DKCarouselViewDidChangeBlock)(DKCarouselView *view, NSInteger inde
 @property (nonatomic, assign, getter = isPause) BOOL pause;
 
 // indicator
+@property (nonatomic, assign) BOOL indicatorIsVisible; // by default page indicator is visible
 @property (nonatomic, strong) UIColor *indicatorTintColor;
 @property (nonatomic, assign) CGPoint indicatorOffset; // default offset is CGPointZero, the indicator is centered horizontally.
 @property (nonatomic, readonly) CGSize indicatorSize; // returns minimum size for given items.
