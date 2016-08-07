@@ -184,6 +184,12 @@ typedef void(^DKCarouselViewTapBlock)();
 
 #pragma mark - Public methods
 
+- (void)setIndicatorIsVisible:(BOOL)indicatorIsVisible {
+    _indicatorIsVisible = indicatorIsVisible;
+    
+    self.pageControl.hidden = !indicatorIsVisible;
+}
+
 - (void)setFinite:(BOOL)finite {
     _finite = finite;
     
@@ -227,8 +233,9 @@ typedef void(^DKCarouselViewTapBlock)();
             [itemView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:self.defaultImage];
         } else if ([item isKindOfClass:[DKCarouselViewItem class]]) {
             UIView *customView = [(DKCarouselViewItem *)item view];
-            [itemView addSubview:customView];
+            customView.frame = itemView.bounds;
             customView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+            [itemView addSubview:customView];
         } else {
             assert(0);
         }
