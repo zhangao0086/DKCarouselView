@@ -402,10 +402,10 @@ typedef void(^DKCarouselViewTapBlock)();
             self.currentPage = GetNextIndex();
         }
         [self setupViews];
-        
-        if (self.didChangeBlock != nil) {
-            self.didChangeBlock(self, self.currentPage);
-        }
+    }
+    
+    if (self.didChangeBlock != nil) {
+        self.didChangeBlock(self, self.currentPage);
     }
     
     self.pageControl.currentPage = self.currentPage;
