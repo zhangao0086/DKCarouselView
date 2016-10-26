@@ -54,6 +54,9 @@ typedef void(^DKCarouselViewDidChangeBlock)(DKCarouselView *view, NSInteger inde
 // set infinite slide or not, defaults to NO.
 @property (nonatomic, assign, getter = isFinite) BOOL finite;
 
+// set selected page index
+@property (nonatomic, assign) NSUInteger selectedPage;
+
 - (void)setItems:(NSArray *)items;
 
 // auto paging.

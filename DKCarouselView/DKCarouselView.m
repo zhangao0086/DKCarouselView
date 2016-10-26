@@ -206,6 +206,17 @@ typedef void(^DKCarouselViewTapBlock)();
     return [self.pageControl sizeForNumberOfPages:self.pageControl.numberOfPages];
 }
 
+- (void)setSelectedPage: (NSUInteger)selectedPage {
+    self.pageControl.currentPage = self.currentPage = selectedPage;
+    if (self.carouselItemViews.count > selectedPage){
+        if (self.finite) {
+            [self.scrollView setContentOffset:CGPointMake(kScrollViewFrameWidth * selectedPage, 0) animated:YES];
+        }else{
+            [self setupViews];
+        }
+    }
+}
+
 -(void)setItems:(NSArray *)items {
     if (items == nil) return;
     
@@ -219,7 +230,7 @@ typedef void(^DKCarouselViewTapBlock)();
     _items = [items copy];
     
     self.pageControl.numberOfPages = _items.count;
-    self.pageControl.currentPage = self.currentPage = 0;
+    self.pageControl.currentPage = self.currentPage;
     
     _scrollView.scrollEnabled = _items.count > 1;
     
