@@ -230,7 +230,7 @@ typedef void(^DKCarouselViewTapBlock)();
     _items = [items copy];
     
     self.pageControl.numberOfPages = _items.count;
-    self.currentPage = MIN(self.currentPage, self.pageControl.numberOfPages);
+    self.currentPage = MIN(self.currentPage, self.pageControl.numberOfPages-1);
     self.pageControl.currentPage = self.currentPage;
     
     _scrollView.scrollEnabled = _items.count > 1;
