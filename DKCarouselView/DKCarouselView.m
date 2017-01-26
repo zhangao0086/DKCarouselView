@@ -81,7 +81,7 @@ typedef void(^DKCarouselViewTapBlock)();
 @property (nonatomic, weak) UIScrollView *scrollView;
 @property (nonatomic, copy) NSArray *items;
 @property (nonatomic, strong) NSMutableArray *carouselItemViews;
-@property (nonatomic, weak) UIPageControl *pageControl;
+@property (nonatomic, readwrite, weak) UIPageControl *pageControl;
 @property (nonatomic, assign) CGSize lastSize;
 
 @property (nonatomic, strong) NSTimer *autoPagingTimer;
@@ -125,10 +125,12 @@ typedef void(^DKCarouselViewTapBlock)();
     scrollView.scrollsToTop = NO;
     scrollView.delegate = self;
     
-    self.indicatorTintColor = [UIColor lightGrayColor];
+    self.indicatorTintColor = [UIColor whiteColor];
+    self.indicatorTintColorUnselected = [UIColor lightGrayColor];
     
     UIPageControl *pageControl = [UIPageControl new];
     pageControl.currentPageIndicatorTintColor = self.indicatorTintColor;
+    pageControl.pageIndicatorTintColor = self.indicatorTintColorUnselected;
     pageControl.userInteractionEnabled = NO;
     
     [self addSubview:scrollView];
@@ -200,6 +202,12 @@ typedef void(^DKCarouselViewTapBlock)();
     _indicatorTintColor = indicatorTintColor;
     
     self.pageControl.currentPageIndicatorTintColor = indicatorTintColor;
+}
+
+- (void)setIndicatorTintColorUnselected:(UIColor *)indicatorTintColorUnselected {
+    _indicatorTintColorUnselected = indicatorTintColorUnselected;
+    
+    self.pageControl.pageIndicatorTintColor = indicatorTintColorUnselected;
 }
 
 - (CGSize)indicatorSize {
