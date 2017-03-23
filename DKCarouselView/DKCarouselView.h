@@ -66,7 +66,9 @@ typedef void(^DKCarouselViewDidChangeBlock)(DKCarouselView *view, NSInteger inde
 // indicator
 @property (nonatomic, assign) BOOL indicatorIsVisible; // by default page indicator is visible
 @property (nonatomic, strong) UIColor *indicatorTintColor;
+@property (nonatomic, strong) UIColor *indicatorTintColorUnselected;
 @property (nonatomic, assign) CGPoint indicatorOffset; // default offset is CGPointZero, the indicator is centered horizontally.
 @property (nonatomic, readonly) CGSize indicatorSize; // returns minimum size for given items.
+@property (nonatomic, readonly, weak) UIPageControl *pageControl;
 
 @end
