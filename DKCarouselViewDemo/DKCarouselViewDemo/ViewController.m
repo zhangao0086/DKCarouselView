@@ -21,9 +21,9 @@
     [super viewDidLoad];
     
     NSArray *images = @[@"https://c1.staticflickr.com/9/8428/7855079606_5fc8852562_z.jpg",
-                        @"http://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Parang_mountain_image_1.jpg/640px-Parang_mountain_image_1.jpg",
-                        @"http://www.openjpeg.org/samples/Bretagne1.bmp",
-                        @"http://blog.absolutvision.com/wp-content/uploads/2009/10/Gimp_2.6b.jpg"
+                        @"http://static.vueling.com/cms/media/1216271/malaga.jpg",
+                        @"http://www.d10.karoo.net/ruby/quiz/50/duck.bmp",
+                        @"http://www.rutadeltempranillo.es/wp-content/uploads/2013/09/puente-genil.jpg",
                         ];
     NSMutableArray *items = [NSMutableArray new];
     for (NSString *imageUrl in images) {
