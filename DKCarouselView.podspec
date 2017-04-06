@@ -11,6 +11,6 @@ Pod::Spec.new do |s|
   s.source_files  = "DKCarouselView/*.{h,m}"
   s.frameworks = "Foundation", "UIKit"
   s.requires_arc = true
-  s.dependency "SDWebImage", "~> 3.8.1"
+  s.dependency "SDWebImage", '~> 4.0'
   s.pod_target_xcconfig = { 'SWIFT_VERSION' => '3.0' }
 end
