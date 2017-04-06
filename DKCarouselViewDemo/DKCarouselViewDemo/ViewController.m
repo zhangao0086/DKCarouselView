@@ -24,6 +24,7 @@
                         @"http://static.vueling.com/cms/media/1216271/malaga.jpg",
                         @"http://www.d10.karoo.net/ruby/quiz/50/duck.bmp",
                         @"http://www.rutadeltempranillo.es/wp-content/uploads/2013/09/puente-genil.jpg",
+                        @"http://tclhost.com/wptdglN.gif",
                         ];
     NSMutableArray *items = [NSMutableArray new];
     for (NSString *imageUrl in images) {
