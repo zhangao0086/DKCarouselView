@@ -8,11 +8,11 @@
 //
 
 #import "DKCarouselView.h"
-#import "UIImageView+WebCache.h"
+#import "FLAnimatedImageView+WebCache.h"
 
 typedef void(^DKCarouselViewTapBlock)();
 
-@interface DKClickableImageView : UIImageView
+@interface DKClickableImageView : FLAnimatedImageView
 
 @property (nonatomic, assign) BOOL enable;
 @property (nonatomic, copy) DKCarouselViewTapBlock tapBlock;
@@ -21,21 +21,46 @@ typedef void(^DKCarouselViewTapBlock)();
 
 @implementation DKClickableImageView
 
-- (instancetype)initWithFrame:(CGRect)frame {
-    if ((self = [super initWithFrame:frame])) {
-        [self commonInit];
+// -initWithImage: isn't documented as a designated initializer of UIImageView, but it actually seems to be.
+// Using -initWithImage: doesn't call any of the other designated initializers.
+- (instancetype)initWithImage:(UIImage *)image
+{
+    self = [super initWithImage:image];
+    if (self) {
+        [self customComonInit];
     }
     return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    if ((self = [super initWithCoder:aDecoder])) {
-        [self commonInit];
+// -initWithImage:highlightedImage: also isn't documented as a designated initializer of UIImageView, but it doesn't call any other designated initializers.
+- (instancetype)initWithImage:(UIImage *)image highlightedImage:(UIImage *)highlightedImage
+{
+    self = [super initWithImage:image highlightedImage:highlightedImage];
+    if (self) {
+        [self customComonInit];
     }
     return self;
 }
 
-- (void)commonInit {
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self customComonInit];
+    }
+    return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        [self customComonInit];
+    }
+    return self;
+}
+
+- (void)customComonInit {
     self.userInteractionEnabled = YES;
     self.enable = YES;
     

@@ -12,7 +12,7 @@
 ![GIF](https://raw.githubusercontent.com/zhangao0086/DKCarouselView/master/preview2.gif)
 
 ## Overview
-DKCarouselView is a automatically & circular infinite(or not) scrolling view.The view auto paging/pause can be specified as well.
+DKCarouselView is a automatically & circular infinite(or not) scrolling view.The view auto paging/pause can be specified as well. Support also GIFs.
 
 ## How To Get Started
 
@@ -48,7 +48,8 @@ DKCarouselView *carouselView = [[DKCarouselView alloc] initWithFrame:CGRectMake(
 NSArray *images = @[@"https://c1.staticflickr.com/9/8428/7855079606_5fc8852562_z.jpg",
                     @"http://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Parang_mountain_image_1.jpg/640px-Parang_mountain_image_1.jpg",
                     @"http://www.openjpeg.org/samples/Bretagne1.bmp",
-                    @"http://blog.absolutvision.com/wp-content/uploads/2009/10/Gimp_2.6b.jpg"
+                    @"http://blog.absolutvision.com/wp-content/uploads/2009/10/Gimp_2.6b.jpg",
+                    @"http://tclhost.com/wptdglN.gif",
                     ];
 NSMutableArray *items = [NSMutableArray new];
 for (NSString *imageUrl in images) {
