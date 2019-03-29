@@ -10,7 +10,7 @@
 #import "DKCarouselView.h"
 #import "FLAnimatedImageView+WebCache.h"
 
-typedef void(^DKCarouselViewTapBlock)();
+typedef void(^DKCarouselViewTapBlock)(void);
 
 @interface DKClickableImageView : FLAnimatedImageView
 
