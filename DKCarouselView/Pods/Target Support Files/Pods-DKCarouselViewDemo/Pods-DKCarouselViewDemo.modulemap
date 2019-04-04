@@ -1,0 +1,6 @@
+framework module Pods_DKCarouselViewDemo {
+  umbrella header "Pods-DKCarouselViewDemo-umbrella.h"
+
+  export *
+  module * { export * }
+}

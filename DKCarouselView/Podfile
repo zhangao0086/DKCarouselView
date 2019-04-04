@@ -1,0 +1,14 @@
+use_frameworks!
+platform :ios, '9.0'
+
+workspace 'DKCarouselView'
+
+target 'DKCarouselView' do
+  project 'DKCarouselView.xcodeproj'
+  pod 'SDWebImage/GIF', '~> 4.4.6'
+end
+
+target 'DKCarouselViewDemo' do
+  project 'DKCarouselViewDemo/DKCarouselViewDemo.xcodeproj'
+  pod 'DKCarouselView', :git => 'https://github.com/CRoig/DKCarouselView', :branch => 'develop'
+end
