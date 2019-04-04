@@ -6,7 +6,7 @@ Pod::Spec.new do |s|
   s.license      = { :type => "MIT", :file => "LICENSE" }
   s.author       = { "Bannings" => "zhangao0086@gmail.com" }
   s.platform     = :ios, "9.0"
-  s.source       = { :git => "https://github.com/CRoig/DKCarouselView.git", 
+  s.source       = { :git => "https://github.com/zhangao0086/DKCarouselView.git", 
                      :branch => "develop" }
   s.source_files  = "DKCarouselView/DKCarouselView/DKCarouselView/*.{h,m}"
   s.frameworks = "Foundation", "UIKit"

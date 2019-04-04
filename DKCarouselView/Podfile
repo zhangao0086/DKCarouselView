@@ -10,5 +10,5 @@ end
 
 target 'DKCarouselViewDemo' do
   project 'DKCarouselViewDemo/DKCarouselViewDemo.xcodeproj'
-  pod 'DKCarouselView', :git => 'https://github.com/CRoig/DKCarouselView', :branch => 'develop'
+  pod 'DKCarouselView', '~> 1.4.12'
 end
